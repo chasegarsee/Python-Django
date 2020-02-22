@@ -1,1 +1,1 @@
-web: gunicorn CLClone.wsgi
+web: gunicorn craigslist_clone.wsgi —-log-file -

@@ -11,6 +11,7 @@ https://docs.djangoproject.com/en/3.0/ref/settings/
 """
 
 import os
+import dj_database_url
 import django_heroku
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
@@ -27,7 +28,8 @@ SECRET_KEY = '*t^p5roeo=wnb0)!8wy02)!1vibg_$a9hg%txk(fpk_#v))n5s'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['0.0.0.0', 'localhost',
+                 'https://salty-citadel-48387.herokuapp.com/']
 
 
 # Application definition
@@ -122,5 +124,8 @@ USE_TZ = True
 
 STATIC_URL = '/static/'
 STATICFILES_DIRS = (os.path.join(BASE_DIR, 'static'),)
+
+db_from_env = dj_database_url.config()
+DATABASES['default'].update(db_from_env)
 
 django_heroku.settings(locals())
