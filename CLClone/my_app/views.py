@@ -7,6 +7,7 @@ from . import models
 # Create your views here.
 
 CRAIGS_BASIC_URL = 'https://nashville.craigslist.org/search/?query={}'
+CRAIGS_BASIC_IMAGE_URL = 'https://images.craigslist.org/{}_300x300.jpg'
 
 
 def home(request):
@@ -23,7 +24,6 @@ def new_search(request):
     soup = BeautifulSoup(data, features="html.parser")
 
     post_listings = soup.find_all("li", {"class": 'result-row'})
-
     final_postings = []
 
     for post in post_listings:
@@ -35,7 +35,15 @@ def new_search(request):
         else:
             post_price = "N/A"
 
-        final_postings.append((post_title, post_url, post_price))
+        if post.find(class_='result-image').get("data-ids"):
+            post_image_id = post.find(
+                class_='result-image').get("data-ids").split(",")[0].split(":")[1]
+            post_image_url = CRAIGS_BASIC_IMAGE_URL.format(post_image_id)
+            print(post_image_url)
+        else:
+            post_image_url = 'https://craigslist.org/images/peace.jpg'
+        final_postings.append(
+            (post_title, post_url, post_price, post_image_url))
 
     frontend_data = {
         "search": search,
